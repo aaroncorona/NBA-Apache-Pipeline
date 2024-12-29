@@ -10,7 +10,7 @@ object NbaCsvProcessor {
     
     // CSV options
     val inferSchema = "false"
-    val firstRowIsHeader = "false"
+    val firstRowIsHeader = "true"
     val delimiter = ","
     
     // Load CSV file into a DataFrame
@@ -20,7 +20,15 @@ object NbaCsvProcessor {
       .option("header", firstRowIsHeader)
       .option("sep", delimiter)
       .load(fileLocation)
-    
-    df.show()
+    println("Raw data:")
+    df.show(5)
+
+    // Get metrics on player ages by team
+    val playerAges = df.select("Team", "Age")
+      .filter(col("Age").isNotNull)
+      .groupBy("Team")
+      .agg(round(avg("Age"), 2).alias("Average Age"), max("Age").alias("Max Age"))
+      println("Ages detail by Team:")
+      playerAges.show(5);
   }
 }
