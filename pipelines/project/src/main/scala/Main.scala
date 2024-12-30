@@ -9,7 +9,5 @@ object Main {
       .getOrCreate()
 
     NbaCsvProcessor.loadCSV(sparkSession)
-
-    spark.stop()
   }
 }
